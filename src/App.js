@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect, useRef, useState} from 'react'
+import {createContext, useContext, useEffect, useReducer, useRef, useState} from 'react'
 import './App.css'
 
 const moods = {
@@ -9,9 +9,23 @@ const moods = {
 
 const MoodContext = createContext(moods)
 
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return state + 1
+    case 'decrement':
+      return state - 1
+    default:
+      throw new Error()
+  }
+}
+
 function App() {
   // create a count variable in the state with a default value of zero.
   const [count, setCount] = useState(0)
+
+  // other way of doing the same thing using the Redux pattern
+  const [count2, dispatch] = useReducer(reducer, 0)
 
   const myBtn = useRef(null)
 
@@ -34,6 +48,7 @@ function App() {
       </button>
 
       <button onClick={() => myBtn.current.click()}>This clicks the other button</button>
+      <button onClick={() => dispatch({type: 'increment'})}>{count2}</button>
     </div>
   )
 }
